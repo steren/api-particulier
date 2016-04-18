@@ -1,5 +1,4 @@
 'use strict';
-const StandardError = require('standard-error');
 
 class UserService {
 
@@ -8,32 +7,22 @@ class UserService {
     this.key = options.redis.userPrefix;
   }
 
-  getUser(email, callback) {
-    this.redis.get(this.key + '::' + email, (err, result) => {
-      if(err) {
-        return callback(new StandardError('Impossible to connect to redis', {code: 500}))
-      }
-      callback(null, JSON.parse(result))
-    })
+  getUser(email) {
+    return this.redis.get(this.key + '::' + email)
+      .then((user) => {
+        return JSON.parse(user)
+      })
   }
 
-  setUser(user, callback) {
-    this.redis.set(this.key +'::'+ user.email, JSON.stringify(user), (err) => {
-      if(err) {
-        return callback(new StandardError('Impossible to connect to redis', {code: 500}))
-      }
-      callback(null, user)
-    })
+  setUser(user) {
+    return this.redis.set(this.key +'::'+ user.email, JSON.stringify(user))
+      .then(() => {
+        return user
+      })
   }
 
-  deleteUser(email, callback) {
-    this.redis.del(this.key + '::'+ email, (err, result) => {
-      if(err) {
-        return callback(new StandardError('Impossible to connect to redis', {code: 500}))
-      }
-      callback(null, result)
-    })
-
+  deleteUser(email) {
+    return this.redis.del(this.key + '::'+ email)
   }
 }
 
