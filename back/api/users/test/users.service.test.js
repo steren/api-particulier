@@ -8,16 +8,16 @@ const emptylogger = require('bunyan-blackhole');
 
 
 describe('Users Service', () => {
+  const redisHost = process.env['REDIS_PORT_HOST'] ||'127.0.0.1'
+  const redisDriver = new Redis(redisHost, 6379);
+  const usersService = new UsersService({
+    redis: {
+      driver: redisDriver,
+      userPrefix: 'user-test',
+      logger: emptylogger()
+    }
+  });
   describe('with redis up & running', () => {
-    const redisHost = process.env['REDIS_PORT_HOST'] ||'127.0.0.1'
-    const redisDriver = new Redis(redisHost, 6379);
-    const usersService = new UsersService({
-      redis: {
-        driver: redisDriver,
-        userPrefix: 'user-test',
-        logger: emptylogger()
-      }
-    });
     const email = 'tge@octo.com'
     const user = {
       email,
@@ -103,5 +103,25 @@ describe('Users Service', () => {
           })
       });
     });
+  })
+
+  describe('checkPassword', () => {
+    let user;
+    describe('with a specific user', () => {
+      beforeEach(() => {
+        user = {
+          email: 'tge@octo.com',
+          password: 'azerty'
+        }
+      })
+
+      it('return true when checking the same password', () => {
+        expect(usersService.checkPassword(user, 'azerty')).to.be.true
+      })
+
+      it('return false when checking a different password', () => {
+        expect(usersService.checkPassword(user, 'azerty2')).to.be.false
+      })
+    })
   })
 });

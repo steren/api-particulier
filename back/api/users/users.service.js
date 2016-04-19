@@ -24,6 +24,10 @@ class UserService {
   deleteUser(email) {
     return this.redis.del(this.key + '::'+ email)
   }
+
+  checkPassword(user, password) {
+    return user.password === password
+  }
 }
 
 
