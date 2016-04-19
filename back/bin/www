@@ -46,6 +46,7 @@ var server = new Server({
   codePostal: nconf.get('codePostal'),
   numeroAllocataire: nconf.get('numeroAllocataire'),
   nconf: nconf,
+  secret: nconf.get('secret'),
   raven: {
     activate: nconf.get('raven:activate'),
     dsn: nconf.get('raven:dsn'),

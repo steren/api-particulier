@@ -2,7 +2,7 @@
 
 const express = require('express');
 const passport = require('passport');
-const jwtStrategy = require('./jwt/passport');//(options);
+const jwtStrategy = require('./jwt/passport');
 
 module.exports = function(options) {
   const router = express.Router();

@@ -75,7 +75,6 @@ function Server (options) {
   app.use(identifyUser)
 
   app.use(formatFromUrl)
-  //app.use(passport.initialize())
   app.use(auth(options))
   routes.configure(app, options);
 
