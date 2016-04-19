@@ -4,6 +4,8 @@ const express = require('express')
 const auth = require('../');
 const Redis = require('ioredis');
 const passport = require('passport')
+const bodyParser = require('body-parser');
+const formatError = require('../../api/lib/middlewares/formatError');
 
 const app = express();
 
@@ -22,8 +24,11 @@ const options = {
   },
   secret
 }
+app.use(bodyParser.json());
 
 app.use(auth(options))
+
+app.use(formatError)
 
 module.exports = {
   app,

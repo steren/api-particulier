@@ -9,7 +9,7 @@ module.exports = function(options) {
 
   passport.use(jwtStrategy(options))
 
-  //router.use('/jwt', require('./jwt'));
+  router.use('/jwt', require('./jwt')(options));
 
   return router;
 }
