@@ -18,6 +18,8 @@ const identifyUser = require('./lib/middlewares/identifyUser')
 const loggerProperties = require('./lib/middlewares/logger')
 const formatError = require('./lib/middlewares/formatError')
 const TokenService = require('./admin/tokens.service');
+const auth = require('../auth');
+const passport = require('passport')
 
 var extend = require('extend');
 
@@ -73,7 +75,8 @@ function Server (options) {
   app.use(identifyUser)
 
   app.use(formatFromUrl)
-
+  //app.use(passport.initialize())
+  app.use(auth(options))
   routes.configure(app, options);
 
   if (options.staticPath) app.use(express.static(options.staticPath));

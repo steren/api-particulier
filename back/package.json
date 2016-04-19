@@ -10,7 +10,7 @@
   "scripts": {
     "pretest": "npm install",
     "lint": "eslint api/**/*.js",
-    "test": "istanbul cover --print details _mocha -- -R spec api/test/** api/*/test/** --recursive",
+    "test": "istanbul cover --print details _mocha -- -R spec api/test/** api/*/test/** auth/*/test/** --recursive",
     "start": "node ./bin/www"
   },
   "author": "SGMAP",
@@ -41,10 +41,13 @@
     "iconv-lite": "^0.4.13",
     "ioredis": "^1.10.0",
     "js2xmlparser": "1.0.0",
+    "jsonwebtoken": "5.7.0",
     "lodash": "^3.9.3",
     "moment": "^2.10.2",
     "nconf": "^0.7.1",
     "optimist": "^0.6.1",
+    "passport": "0.3.2",
+    "passport-jwt": "2.0.0",
     "raven": "0.9.0",
     "request": "^2.55.0",
     "stackup": "^1.0.0",

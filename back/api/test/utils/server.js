@@ -27,6 +27,7 @@ module.exports = function(){
       activate: false,
       dsn:''
     },
+    secret:'titi',
     numeroAllocataire: '1234567',
     codePostal: '75009',
     ban: {
@@ -42,7 +43,7 @@ module.exports = function(){
     options.redis.host = redisHost
   }
 
-  nock.enableNetConnect('localhost');
+  nock.enableNetConnect('127.0.0.1');
 
 
   beforeEach(function (done) {
@@ -108,7 +109,7 @@ module.exports = function(){
 
   var api = function () {
     return supertest
-      .agent('http://localhost:' + server.getPort());
+      .agent('http://127.0.0.1:' + server.getPort());
   };
   return {
     api : api
