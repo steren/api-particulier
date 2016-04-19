@@ -11,21 +11,17 @@ function Auth(options) {
 
   this.canAccessApi = function(req, res, next) {
     var token = req.get('X-API-Key') || ""
-
-    tokenService.getToken(token, (err, result) => {
-      if(err) {
-       req.logger.warn(err);
-       return next(err)
-      }
+    req.consumer= {}
+    tokenService.getToken(token)
+    .then((result) => {
       if(result) {
-       req.logger.debug({ event: 'authorization' }, result.name + ' is authorized ('+ result.role+')');
        req.consumer = result;
        next()
       } else {
-       req.logger.debug({ event: 'authorization' }, 'not authorized');
-       req.consumer= {}
        next(new StandardError('You are not authorized to use the api', {code: 401}));
       }
+    }, (err) => {
+      next(new StandardError(err, {code: 500}));
     })
   }
 
