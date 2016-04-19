@@ -15,7 +15,7 @@ app.get('/jwt', passport.authenticate('jwt', { session: false}),
   }
 );
 const secret = 'titi'
-const redis = new Redis(6379, 'localhost')
+const redis = new Redis(6379, process.env['REDIS_PORT_HOST'] || 'localhost')
 const userPrefix = 'testUser'
 const options = {
   redis: {

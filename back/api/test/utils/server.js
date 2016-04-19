@@ -34,8 +34,8 @@ module.exports = function(){
       baseUrl: "http://adresse.data.gouv.local"
     }
   };
-  var serverPort = process.env['SERVER_PORT_TEST'];
-  var redisHost = process.env['REDIS_PORT_HOST'];
+  const serverPort = process.env['SERVER_PORT_TEST'];
+  const redisHost = process.env['REDIS_PORT_HOST'];
   if(serverPort) {
     options.port = serverPort
   }
