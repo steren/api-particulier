@@ -1,10 +1,13 @@
 'use strict';
 
+const jwt = require('jsonwebtoken')
+
 class UserService {
 
   constructor(options) {
     this.redis = options.redis.driver
     this.key = options.redis.userPrefix;
+    this.secret = options.secret
   }
 
   getUser(email) {
@@ -27,6 +30,10 @@ class UserService {
 
   checkPassword(user, password) {
     return user.password === password
+  }
+
+  signToken(user) {
+    return jwt.sign({ sub: user.email }, this.secret, { expiresIn: '10m'});
   }
 }
 

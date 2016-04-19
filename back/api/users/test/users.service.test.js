@@ -5,9 +5,11 @@ const UsersService = require('./../users.service')
 const Redis = require('ioredis');
 const StandardError = require('standard-error')
 const emptylogger = require('bunyan-blackhole');
+const jwt = require('jsonwebtoken')
 
 
 describe('Users Service', () => {
+  const secret = 'secret'
   const redisHost = process.env['REDIS_PORT_HOST'] ||'127.0.0.1'
   const redisDriver = new Redis(redisHost, 6379);
   const usersService = new UsersService({
@@ -15,7 +17,8 @@ describe('Users Service', () => {
       driver: redisDriver,
       userPrefix: 'user-test',
       logger: emptylogger()
-    }
+    },
+    secret
   });
   describe('with redis up & running', () => {
     const email = 'tge@octo.com'
@@ -121,6 +124,35 @@ describe('Users Service', () => {
 
       it('return false when checking a different password', () => {
         expect(usersService.checkPassword(user, 'azerty2')).to.be.false
+      })
+    })
+  })
+
+  describe('signToken', () => {
+    let user
+    describe('with bob as a user', () => {
+      beforeEach(() => {
+        user = {
+          email: 'bob@octo.com',
+          name: 'bob',
+          password: 'azerty'
+        }
+      })
+
+      it('must sign the key with jwt', () => {
+        const actualToken = usersService.signToken(user)
+
+        const payload = jwt.verify(actualToken, secret)
+
+        expect(payload.sub).to.equal('bob@octo.com')
+      })
+
+      it('must sign with a 10 minutes validation', () => {
+        const actualToken = usersService.signToken(user)
+
+        const payload = jwt.verify(actualToken, secret)
+
+        expect(payload.exp - payload.iat).to.equal(600)
       })
     })
   })
